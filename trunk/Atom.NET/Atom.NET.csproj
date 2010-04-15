@@ -1,0 +1,199 @@
+﻿<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8DE2053A-247B-430A-86C3-E52B4725AA60}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Atom.NET</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Atom.NET</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>0.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
+    <Reference Include="System.XML">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Atom.AdditionalElements\DublinCore\DcElement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.AdditionalElements\ScopedElement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.AdditionalElements\ScopedElementCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core.Collections\AtomContentCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core.Collections\AtomEntryCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core.Collections\AtomLinkCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core.Collections\AtomPersonConstructCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core\AtomContent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core\AtomContentConstruct.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core\AtomDateConstruct.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core\AtomElement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core\AtomEntry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core\AtomFeed.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core\AtomGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core\AtomLink.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core\AtomPersonConstruct.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core\Enums.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Core\Exceptions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Utils\DefaultValues.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Atom.Utils\Utils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AtomReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AtomWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mvpxml\XmlNamespaces.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mvpxml\XPathNavigatorReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Content Include="AUTHORS.txt" />
+    <Content Include="CHANGES.txt" />
+    <Content Include="COPYING.txt" />
+    <Content Include="README.txt" />
+    <Content Include="TODO.txt" />
+    <EmbeddedResource Include="mediatypes.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
