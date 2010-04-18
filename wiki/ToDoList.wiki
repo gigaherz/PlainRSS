@@ -1,0 +1,23 @@
+#summary To Do List.
+#labels Featured,Phase-Implementation,Phase-Support
+
+= Introduction =
+
+This page will contain the features requested and/or planned.
+
+= Important features =
+These are features to be implemented as soon as possible.
+  * Figure out how to avoid stealing the focus from other applications.
+  * 
+
+= Accepted features =
+These are features which are not extremely important but will be implemented at some point.
+  * dunno...
+
+= Requested features =
+These are features people has requests, but might or might not be implemented.
+  * none so far...
+
+= Rejected features =
+These are features that are either outside of the scope of the project, or too complex to implement correctly. These *will not be implemented* (unless the scope of the project changes or technology makes it implementable).
+  * none so far...
