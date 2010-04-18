@@ -5,6 +5,7 @@
 These are features to be implemented as soon as possible.
   * Figure out how to avoid stealing the focus from other applications. -- _in progress (gigaherz)_
   * Configurable update interval (global).
+  * When there's new items to show, make sure the oldest is visible and at the "bottom" of the stack (so that you see as many new items as possible, starting from the first new).
 
 = Accepted features =
 These are features which are not extremely important but will be implemented at some point.
