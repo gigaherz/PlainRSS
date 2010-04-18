@@ -1,9 +1,5 @@
-#summary To Do List.
+#summary This page contains the features requested and/or planned.
 #labels Featured,Phase-Implementation,Phase-Support
-
-= Introduction =
-
-This page will contain the features requested and/or planned.
 
 = Important features =
 These are features to be implemented as soon as possible.
