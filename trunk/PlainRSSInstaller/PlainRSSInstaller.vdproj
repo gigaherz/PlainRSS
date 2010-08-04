@@ -15,19 +15,19 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_4CF6581216F96E56B9D67A50140C4639"
+        "OwnerKey" = "8:_5B7C1530911647498E619B4DEE902873"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5B7C1530911647498E619B4DEE902873"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_88556DAF2FBCF2771B660A1C413D5150"
-        "OwnerKey" = "8:_5B7C1530911647498E619B4DEE902873"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B1FF2744EE0C6A26E373788005296D27"
+        "MsmKey" = "8:_9113668FF5603626F120F5DCDEF5A0B6"
         "OwnerKey" = "8:_5B7C1530911647498E619B4DEE902873"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -40,13 +40,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_88556DAF2FBCF2771B660A1C413D5150"
+        "OwnerKey" = "8:_4CF6581216F96E56B9D67A50140C4639"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B1FF2744EE0C6A26E373788005296D27"
+        "OwnerKey" = "8:_9113668FF5603626F120F5DCDEF5A0B6"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -112,14 +112,14 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_88556DAF2FBCF2771B660A1C413D5150"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4CF6581216F96E56B9D67A50140C4639"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:RSS.NET, Version=0.86.3664.40433, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:RSS.NET, Version=0.86.3757.36926, Culture=neutral, PublicKeyToken=2f663770cba68cfc, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_88556DAF2FBCF2771B660A1C413D5150"
+                    "_4CF6581216F96E56B9D67A50140C4639"
                     {
                     "Name" = "8:RSS.NET.dll"
                     "Attributes" = "3:512"
@@ -143,14 +143,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B1FF2744EE0C6A26E373788005296D27"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9113668FF5603626F120F5DCDEF5A0B6"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Atom.NET, Version=0.4.3.40433, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:Atom.NET, Version=0.4.3.8272, Culture=neutral, PublicKeyToken=dfd513aadd65a3d3, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_B1FF2744EE0C6A26E373788005296D27"
+                    "_9113668FF5603626F120F5DCDEF5A0B6"
                     {
                     "Name" = "8:Atom.NET.dll"
                     "Attributes" = "3:512"
@@ -240,16 +240,16 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:PlainRSSInstaller"
-        "ProductCode" = "8:{8E1DDC85-105F-4ECC-ADD5-4A12EE2F37E4}"
-        "PackageCode" = "8:{560C9DC5-909F-45DD-9878-72B3877F030E}"
+        "ProductName" = "8:PlainRSS"
+        "ProductCode" = "8:{12D5687C-B99D-45B6-AAC1-3EB8D180C349}"
+        "PackageCode" = "8:{D37C7209-8ABD-4365-9098-56D14A482C08}"
         "UpgradeCode" = "8:{D94A452B-D89F-4568-B518-15083EE8C2CE}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.0"
-        "Manufacturer" = "8:David Quintana"
+        "ProductVersion" = "8:1.1.7"
+        "Manufacturer" = "8:Gigaherz Utilities"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://gigaherz.pcsx2.net/"
         "Title" = "8:PlainRSS Installer"

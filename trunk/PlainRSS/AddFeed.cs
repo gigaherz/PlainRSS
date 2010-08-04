@@ -6,11 +6,24 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace PlainRSS
 {
     public partial class AddFeed : Form
     {
+        const int WM_USER = 0x400;
+        const int PBM_SETSTATE = WM_USER + 16;
+        enum ProgressBarState {
+            Normal = 0x0001,
+            Error = 0x0002,
+            Paused = 0x0003
+        }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError =
+        false)]
+        static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
         Feed feed = null;
 
         public Feed Feed
@@ -18,10 +31,16 @@ namespace PlainRSS
             get { return feed; }
         }
 
+        private void SetProgressState(ProgressBar pb, ProgressBarState state)
+        {
+            SendMessage(pb.Handle,PBM_SETSTATE,(IntPtr)state,IntPtr.Zero);
+        }
+
         public AddFeed()
         {
             InitializeComponent();
             comboBox1.SelectedIndex = 0;
+            SetProgressState(progressBar1, ProgressBarState.Normal);
         }
 
         public AddFeed(string feedSource)
@@ -44,6 +63,7 @@ namespace PlainRSS
 
         private void button1_Click(object sender, EventArgs e)
         {
+            SetProgressState(progressBar1, ProgressBarState.Normal);
             progressBar1.Value = 0;
             try
             {
@@ -56,12 +76,19 @@ namespace PlainRSS
             catch (Exception)
             {
                 MessageBox.Show("Error loading feed.");
+                progressBar1.Value = 100;
+                SetProgressState(progressBar1, ProgressBarState.Error);
+                return;
             }
             if(feed.Items.Count() == 0)
             {
                 MessageBox.Show("Invalid feed.");
+                progressBar1.Value = 100;
+                SetProgressState(progressBar1, ProgressBarState.Error);
+                return;
             }
             progressBar1.Value = 100;
+            return;
         }
 
         private void button2_Click(object sender, EventArgs e)

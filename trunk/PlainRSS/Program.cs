@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Runtime.Remoting.Channels;
 using System.IO;
 using System.IO.Pipes;
+using System.Net;
 
 namespace PlainRSS
 {
@@ -23,6 +24,18 @@ namespace PlainRSS
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            if (args.Length == 1 && args[0].Substring(0,7) == "feed://") // special case for adding feeds from the browser
+            {
+                try
+                {
+                    Uri url = new Uri(args[0]);
+                    args = new string[] { "-ShowBrowser", "-AddFeed", "http://" + args[0].Substring(7) };
+                }
+                catch (Exception)
+                {
+                }
+            }
 
             try
             {
@@ -46,6 +59,9 @@ namespace PlainRSS
             }
             catch (IOException)
             {
+                if (args.Length == 0)
+                    return;
+
                 MemoryStream ms = new MemoryStream();
                 BinaryWriter wr = new BinaryWriter(ms);
                 wr.Write(args.Length);
