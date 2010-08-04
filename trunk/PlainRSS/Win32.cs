@@ -114,5 +114,14 @@ namespace PlainRSS
         [DllImport("user32.dll", ExactSpelling=true, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern IntPtr GetDesktopWindow(); 
+
+        [DllImport("user32.dll", SetLastError = false)]
+        public static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
     }
 }

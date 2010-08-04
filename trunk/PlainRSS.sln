@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSS.NET", "RSS.NET\RSS.NET.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{66FE0316-C5E5-45F0-AAB8-851DAA03DA2C}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PlainRSSInstaller", "PlainRSSInstaller\PlainRSSInstaller.vdproj", "{DC484F5D-07FC-485B-B541-7216E2B92A33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,12 +43,16 @@ Global
 		{C42FC014-7E12-4FAF-9BC9-79BF1529440D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C42FC014-7E12-4FAF-9BC9-79BF1529440D}.Release|x86.ActiveCfg = Release|x86
 		{C42FC014-7E12-4FAF-9BC9-79BF1529440D}.Release|x86.Build.0 = Release|x86
+		{DC484F5D-07FC-485B-B541-7216E2B92A33}.Debug|Any CPU.ActiveCfg = Debug
+		{DC484F5D-07FC-485B-B541-7216E2B92A33}.Debug|x86.ActiveCfg = Debug
+		{DC484F5D-07FC-485B-B541-7216E2B92A33}.Release|Any CPU.ActiveCfg = Release
+		{DC484F5D-07FC-485B-B541-7216E2B92A33}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8DE2053A-247B-430A-86C3-E52B4725AA60} = {66FE0316-C5E5-45F0-AAB8-851DAA03DA2C}
 		{C42FC014-7E12-4FAF-9BC9-79BF1529440D} = {66FE0316-C5E5-45F0-AAB8-851DAA03DA2C}
+		{8DE2053A-247B-430A-86C3-E52B4725AA60} = {66FE0316-C5E5-45F0-AAB8-851DAA03DA2C}
 	EndGlobalSection
 EndGlobal

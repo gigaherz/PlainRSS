@@ -4,11 +4,17 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Runtime.Remoting.Channels;
+using System.IO;
+using System.IO.Pipes;
 
 namespace PlainRSS
 {
     static class Program
     {
+        public static string DataFolder;
+        public static NamedPipeServerStream IPCServer;
+        public static FeedManager MainWindow;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -18,32 +24,44 @@ namespace PlainRSS
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // get the name of our process
-            Process proc = Process.GetCurrentProcess();
-            // get the list of all processes by that name
-            Process[] processes = Process.GetProcessesByName(proc.ProcessName);
-            // if there is more than one process...
-            if (processes.Length > 1)
+            try
             {
-                foreach(Process p in processes)
+                DataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PlainRSS");
+                if (!File.Exists(DataFolder))
                 {
-                    if(p.Id != proc.Id)
-                    {
-                        MessageHelper hlp = new MessageHelper();
-                        if (hlp.SendMessageToHandle(p.MainWindowHandle, MessageHelper.WM_USER + 1336, 0, args.Length) == 1337)
-                        {
-
-                            for (int i = 0; i < args.Length; i++)
-                                hlp.SendStringMessageToHandle(p.MainWindowHandle, i, args[i]);
-                            hlp.SendMessageToHandle(p.MainWindowHandle, MessageHelper.WM_USER + 1337, 0, args.Length);
-                        }
-                    }
+                    Directory.CreateDirectory(DataFolder);
                 }
-                MessageBox.Show("Another instance running. Exiting.");
-                return;
+            }
+            catch (IOException)
+            {
+                DataFolder = Application.StartupPath;
             }
 
-            Application.Run(new FeedManager(args));
+            try
+            {
+                IPCServer = new NamedPipeServerStream("PlainRSS.IPC", PipeDirection.In, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
+
+                MainWindow = new FeedManager(args);
+                Application.Run(MainWindow);
+            }
+            catch (IOException)
+            {
+                MemoryStream ms = new MemoryStream();
+                BinaryWriter wr = new BinaryWriter(ms);
+                wr.Write(args.Length);
+                foreach (string arg in args)
+                    wr.Write(arg);
+                wr.Flush();
+                byte[] contents = ms.ToArray();
+
+                NamedPipeClientStream cli = new NamedPipeClientStream(".", "PlainRSS.IPC", PipeDirection.Out, PipeOptions.None);
+                cli.Connect();
+                cli.Write(BitConverter.GetBytes(contents.Length), 0, 4);
+                cli.Write(contents, 0, contents.Length);
+                cli.Flush();
+                cli.WaitForPipeDrain();
+                cli.Close();
+            }
         }
     }
 }
