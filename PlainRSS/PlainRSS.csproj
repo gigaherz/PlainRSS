@@ -16,12 +16,12 @@
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>plainrss.snk</AssemblyOriginatorKeyFile>
     <TargetZone>Internet</TargetZone>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ManifestCertificateThumbprint>74021C8B42DD021BA81E83904C79ACAD3DCAF353</ManifestCertificateThumbprint>
     <ManifestKeyFile>PlainRSS_TemporaryKey.pfx</ManifestKeyFile>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
     <PublishUrl>..\Publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>

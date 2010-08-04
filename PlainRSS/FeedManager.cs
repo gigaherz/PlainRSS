@@ -76,16 +76,37 @@ namespace PlainRSS
             if (args.Length == 0)
                 return;
 
-            switch (args[0])
+            int first = 0;
+            while (first < args.Length)
             {
-                case "-AddFeed":
-                    if(args.Length != 2)
-                    {
-                        MessageBox.Show("Invalid number of parameters in command.","PlainRSS IPC");
-                    }
-                    else
-                        AddNewFeed(new AddFeed(args[1]));
-                    break;
+                int remaining = args.Length - first;
+
+                int nargs = 1;
+                switch (args[first+0])
+                {
+                    case "-AddFeed":
+                        if (remaining < 2)
+                        {
+                            MessageBox.Show("Invalid number of parameters in command.", "PlainRSS IPC");
+                        }
+                        else
+                            AddNewFeed(new AddFeed(args[first+1]));
+                        nargs = 2;
+                        break;
+                    case "-ShowBrowser":
+                        Show();
+                        break;
+                    case "-HideBrowser":
+                        Hide();
+                        break;
+                    case "-Popup":
+                        TogglePopup();
+                        break;
+                    case "-Exit":
+                        Close();
+                        break;
+                }
+                first += nargs;
             }
         }
 
@@ -313,6 +334,7 @@ namespace PlainRSS
                 ParseCommandLine(newArgs);
             else
                 Hide();
+
             feeds = FeedLoader.LoadFeeds();
             var node = treeView1.Nodes[0];
             foreach (Feed feed in feeds)
