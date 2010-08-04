@@ -105,7 +105,7 @@ namespace PlainRSS
         {
             if((feed == null) && !string.IsNullOrEmpty(textBox1.Text))
             {
-                button2_Click(this, EventArgs.Empty);
+                button1_Click(this, EventArgs.Empty);
             }
         }
     }

@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
+using System.IO;
 
 namespace PlainRSS
 {
@@ -24,6 +26,16 @@ namespace PlainRSS
 
         bool closing = false;
 
+        bool isWaitingForConnection = false;
+        bool isWaitingForRead = false;
+        byte[] asyncReadData = new byte[1024];
+        MemoryStream memStream = null;
+        int nBytesRead = 0;
+        int nBytesRemaining = 0;
+
+        private delegate void ParseCommandLineDelegate(string[] args);
+
+
         public FeedManager(string[] args)
         {
             newArgs = args;
@@ -32,33 +44,8 @@ namespace PlainRSS
             InitializeComponent();
         }
 
-        protected override void WndProc(ref Message m)
+        private void AddNewFeed(AddFeed af)
         {
-            switch (m.Msg)
-            {
-                case MessageHelper.WM_USER+1336:
-                    newArgs = new string[(int)m.LParam];
-                    m.Result = (IntPtr)1337;
-                    break;
-                case MessageHelper.WM_USER + 1337:
-                    ParseCommandLine(newArgs);
-                    break;
-                case MessageHelper.WM_COPYDATA:
-                    MessageHelper.COPYDATASTRUCT mystr = new MessageHelper.COPYDATASTRUCT();
-                    Type mytype = mystr.GetType();
-                    mystr = (MessageHelper.COPYDATASTRUCT)m.GetLParam(mytype);
-                    newArgs[(int)mystr.dwData] = mystr.lpData;
-                    break;
-            }
-
-            base.WndProc(ref m);
-        }
-
-        private void ParseCommandLine(string[] args)
-        {
-            // TODO
-            //MessageBox.Show("New commandline received with " + args.Length.ToString() + " args:" + string.Join(", ", args));
-            AddFeed af = new AddFeed(args[0]);
             if (af.ShowDialog() == DialogResult.OK)
             {
                 try
@@ -73,19 +60,219 @@ namespace PlainRSS
                     lastKey++;
                     newNode.Tag = feed;
                     node.Expand();
+                    RefreshFeeds();
                 }
                 catch (Exception)
                 {
                     MessageBox.Show("Error adding feed.");
                 }
             }
+        }
 
+        private void ParseCommandLine(string[] args)
+        {
+            // TODO
+            //MessageBox.Show("New commandline received with " + args.Length.ToString() + " args:" + string.Join(", ", args));
+            if (args.Length == 0)
+                return;
+
+            switch (args[0])
+            {
+                case "-AddFeed":
+                    if(args.Length != 2)
+                    {
+                        MessageBox.Show("Invalid number of parameters in command.","PlainRSS IPC");
+                    }
+                    else
+                        AddNewFeed(new AddFeed(args[1]));
+                    break;
+            }
+        }
+
+        private void ReadMore_Callback(IAsyncResult res)
+        {
+            try
+            {
+                Program.IPCServer.EndRead(res);
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    isWaitingForConnection = true;
+                    isWaitingForRead = false;
+
+                    Program.IPCServer.BeginWaitForConnection(new AsyncCallback(WaitForConnection_Callback), this);
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            if (res.IsCompleted)
+            {
+                memStream.Write(asyncReadData, 0, nBytesRead);
+
+                if (nBytesRemaining == 0)
+                {
+                    BinaryReader memStreamReader = new BinaryReader(memStream);
+                    List<string> args = new List<string>();
+
+                    memStream.Seek(0, SeekOrigin.Begin);
+
+                    int nParams = memStreamReader.ReadInt32();
+                    for (int i = 0; i < nParams; i++)
+                        args.Add(memStreamReader.ReadString());
+
+                    this.Invoke(new ParseCommandLineDelegate(ParseCommandLine), (object)(args.ToArray()));
+
+                    Program.IPCServer.Disconnect();
+
+                    isWaitingForConnection = true;
+                    isWaitingForRead = false;
+
+                    Program.IPCServer.BeginWaitForConnection(new AsyncCallback(WaitForConnection_Callback), this);
+                }
+                else
+                {
+                    nBytesRead = nBytesRemaining;
+                    if (nBytesRead > 1024)
+                    {
+                        nBytesRemaining = nBytesRead - 1024;
+                        nBytesRead = 1024;
+                    }
+                    else nBytesRemaining = 0;
+
+                    Program.IPCServer.BeginRead(asyncReadData, 0, nBytesRead, new AsyncCallback(ReadMore_Callback), this);
+                }
+            }
+            else
+            {
+                try
+                {
+                    Program.IPCServer.Disconnect();
+                }
+                catch (Exception)
+                {
+                }
+                finally
+                {
+                    isWaitingForConnection = true;
+                    isWaitingForRead = false;
+
+                    Program.IPCServer.BeginWaitForConnection(new AsyncCallback(WaitForConnection_Callback), this);
+                }
+                // ELSE!!!!!!!!!!!!!
+            }
+        }
+
+        private void ReadBegin_Callback(IAsyncResult res)
+        {
+            try
+            {
+                Program.IPCServer.EndRead(res);
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    isWaitingForConnection = true;
+                    isWaitingForRead = false;
+
+                    Program.IPCServer.BeginWaitForConnection(new AsyncCallback(WaitForConnection_Callback), this);
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            if (res.IsCompleted)
+            {
+                nBytesRead = BitConverter.ToInt32(asyncReadData, 0);
+
+                memStream = new MemoryStream(nBytesRead);
+
+                if (nBytesRead > 1024)
+                {
+                    nBytesRemaining = nBytesRead - 1024;
+                    nBytesRead = 1024;
+                }
+                else nBytesRemaining = 0;
+
+                Program.IPCServer.BeginRead(asyncReadData, 0, nBytesRead, new AsyncCallback(ReadMore_Callback), this);
+            }
+            else
+            {
+                try
+                {
+                    Program.IPCServer.Disconnect();
+                }
+                catch (Exception)
+                {
+                }
+                finally
+                {
+                    try
+                    {
+                        isWaitingForConnection = true;
+                        isWaitingForRead = false;
+
+                        Program.IPCServer.BeginWaitForConnection(new AsyncCallback(WaitForConnection_Callback), this);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                // ELSE!!!!!!!!!!!!!
+            }
+        }
+
+        private void WaitForConnection_Callback(IAsyncResult res)
+        {
+            try
+            {
+                Program.IPCServer.EndWaitForConnection(res);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            if (res.IsCompleted)
+            {
+
+                isWaitingForConnection = false;
+                isWaitingForRead = true;
+
+                Program.IPCServer.BeginRead(asyncReadData, 0, 4, new AsyncCallback(ReadBegin_Callback), this);
+            }
+            else
+            {
+                try
+                {
+                    Program.IPCServer.Disconnect();
+                }
+                catch (Exception)
+                {
+                }
+                finally
+                {
+                    isWaitingForConnection = true;
+                    isWaitingForRead = false;
+
+                    Program.IPCServer.BeginWaitForConnection(new AsyncCallback(WaitForConnection_Callback), this);
+                }
+                // ELSE!!!!!!!!!!!!!
+            }
         }
 
         private void FeedManager_Load(object sender, EventArgs e)
         {
             notifyIcon1.Icon = Properties.Resources.feed_magnify;
             notifyIcon1.Visible = true;
+
+            isWaitingForConnection = true;
+            Program.IPCServer.BeginWaitForConnection(new AsyncCallback(WaitForConnection_Callback), this);
         }
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -151,27 +338,7 @@ namespace PlainRSS
 
         private void button1_Click(object sender, EventArgs e)
         {
-            AddFeed af = new AddFeed();
-            if(af.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    Feed feed = af.Feed;
-                    feeds.Add(feed);
-
-                    FeedLoader.AddNewFeed(feed);
-
-                    var node = treeView1.Nodes[0];
-                    TreeNode newNode = node.Nodes.Add("#" + lastKey.ToString(), feed.FeedTitle, 1, 1);
-                    lastKey++;
-                    newNode.Tag = feed;
-                    node.Expand();
-                }
-                catch(Exception)
-                {
-                    MessageBox.Show("Error adding feed.");
-                }
-            }
+            AddNewFeed(new AddFeed());
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -220,6 +387,12 @@ namespace PlainRSS
                 e.Cancel = true;
                 return;
             }
+
+            closing = true;
+
+            Program.IPCServer.Close();
+            Program.IPCServer.Dispose();
+            Program.IPCServer = null;
 
             if (backgroundWorker1.IsBusy)
                 backgroundWorker1.CancelAsync();

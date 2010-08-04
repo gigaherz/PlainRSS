@@ -18,7 +18,7 @@ namespace PlainRSS
 
             try
             {
-                XDocument doc = XDocument.Load("feeds.xml");
+                XDocument doc = XDocument.Load(Path.Combine(Program.DataFolder, "feeds.xml"));
                 var query = from c in doc.Elements("feedList").Elements("feed") select c;
 
                 foreach (var item in query)
@@ -43,8 +43,11 @@ namespace PlainRSS
 
         public static bool AddNewFeed(Feed feed)
         {
+
             try
             {
+                string FeedsFilePath = Path.Combine(Program.DataFolder, "feeds.xml");
+
                 Uri Source = feed.FeedSource;
                 string Title = feed.FeedTitle;
                 FeedType Type = feed.FeedType;
@@ -53,7 +56,7 @@ namespace PlainRSS
                 XDocument doc;
                 try
                 {
-                    doc = XDocument.Load("feeds.xml");
+                    doc = XDocument.Load(FeedsFilePath);
                 }
                 catch (Exception)
                 {
@@ -75,7 +78,7 @@ namespace PlainRSS
                 else
                     doc.Element("feedList").Add(element);
 
-                doc.Save("feeds.xml");
+                doc.Save(FeedsFilePath);
 
                 return true;
             }
@@ -91,7 +94,7 @@ namespace PlainRSS
 
             try
             {
-                XDocument doc = XDocument.Load("itemCache.xml");
+                XDocument doc = XDocument.Load(Path.Combine(Program.DataFolder, "itemCache.xml"));
 
                 var source = from c in doc.Elements("itemCache").Elements("feed")
                              where c.Attribute("source").Value == feed.FeedSource.ToString()
@@ -119,7 +122,7 @@ namespace PlainRSS
                     bool IsDisplayed = false;
 
                     if (!bool.TryParse(item.Element("visited").Value, out IsVisited))
-                        IsVisited=false;
+                        IsVisited = false;
 
                     if (!bool.TryParse(item.Element("hidden").Value, out IsHidden))
                         IsHidden = false;
@@ -148,10 +151,12 @@ namespace PlainRSS
         {
             try
             {
+                string FeedItemsFilePath = Path.Combine(Program.DataFolder, "itemCache.xml");
+
                 XDocument doc;
                 try
                 {
-                    doc = XDocument.Load("itemCache.xml");
+                    doc = XDocument.Load(FeedItemsFilePath);
                 }
                 catch (Exception)
                 {
@@ -163,7 +168,7 @@ namespace PlainRSS
                              select c;
 
                 XElement element;
-                if(source.Count()==1)
+                if (source.Count() == 1)
                 {
                     element = source.First();
                     element.Elements().Remove(); // leave attributes
@@ -174,7 +179,7 @@ namespace PlainRSS
                     doc.Element("itemCache").Add(element);
                 }
 
-                foreach(FeedItem item in feed.Items)
+                foreach (FeedItem item in feed.Items)
                 {
                     XElement xitem = new XElement(XName.Get("item"),
                         new XElement(XName.Get("id"), item.ItemId),
@@ -188,7 +193,7 @@ namespace PlainRSS
                     element.Add(xitem);
                 }
 
-                doc.Save("itemCache.xml");
+                doc.Save(FeedItemsFilePath);
 
                 return true;
             }

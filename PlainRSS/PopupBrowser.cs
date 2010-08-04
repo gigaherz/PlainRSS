@@ -87,7 +87,7 @@ namespace PlainRSS
             }
 
             hScrollBar1.Minimum = 0;
-            hScrollBar1.Maximum = visibleItems.Count;
+            hScrollBar1.Maximum = visibleItems.Count-1;
             hScrollBar1.SmallChange = 1;
             hScrollBar1.LargeChange = MaxOnScreen;
             hScrollBar1.Value = firstShown;
@@ -140,7 +140,7 @@ namespace PlainRSS
             return 0;
         }
 
-        public void RefreshFeeds()
+        private void RefreshFeeds_Internal()
         {
             visibleItems = new List<FeedItem>();
 
@@ -174,13 +174,14 @@ namespace PlainRSS
             var bounds = Screen.GetWorkingArea(this);
             Location = new Point(bounds.Width - Width - 8,
                 bounds.Height - Height - 8);
+
             RefreshFeeds();
         }
 
         internal void AddFeed(Feed feed)
         {
             feeds.Add(feed);
-            RefreshFeeds();
+            RefreshFeeds_Internal();
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -223,6 +224,18 @@ namespace PlainRSS
         {
             if (OnClose != null)
                 OnClose.Invoke(this, EventArgs.Empty);
+        }
+
+        public void RefreshFeeds()
+        {
+            IntPtr ptr = Win32.GetForegroundWindow();
+
+            RefreshFeeds_Internal();
+
+            if (ptr != IntPtr.Zero)
+            {
+                bool res = Win32.SetForegroundWindow(ptr);
+            }
         }
     }
 }
