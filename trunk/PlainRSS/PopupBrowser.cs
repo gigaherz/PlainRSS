@@ -26,6 +26,11 @@ namespace PlainRSS
 
         public event EventHandler<EventArgs> OnClose;
         public event EventHandler<RepositionEventArgs> OnReposition;
+        
+        protected override bool ShowWithoutActivation
+        {
+            get { return true; }
+        }
 
         public PopupBrowser(List<Feed> feedList)
         {

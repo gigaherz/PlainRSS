@@ -202,5 +202,10 @@ namespace PlainRSS
                 return false;
             }
         }
+
+        internal static void RemoveFeed(Feed feed)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
