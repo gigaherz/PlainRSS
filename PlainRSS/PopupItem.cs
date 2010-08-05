@@ -27,6 +27,11 @@ namespace PlainRSS
         double tempOpacity = 1;
         DateTime lastOp;
 
+        protected override bool ShowWithoutActivation
+        {
+            get { return true; }
+        }
+
         public IStackParent StackParent
         {
             get { return stackParent; }

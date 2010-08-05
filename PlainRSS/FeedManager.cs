@@ -69,6 +69,28 @@ namespace PlainRSS
             }
         }
 
+        private void ModifyFeed(Feed feed)
+        {
+            AddFeed af = new AddFeed(feed);
+            if (af.ShowDialog() == DialogResult.OK)
+            {
+                FeedLoader.RemoveFeed(feed);
+                feeds.Remove(feed);
+
+                Feed f = af.Feed;
+                feeds.Add(f);
+                FeedLoader.AddFeed(feed);
+                if ((feedBrowser != null) && (feedBrowser.Visible))
+                    feedBrowser.AddFeed(f);
+            }
+        }
+
+        private void RemoveFeed(Feed feed)
+        {
+            FeedLoader.RemoveFeed(feed);
+            feeds.Remove(feed);
+        }
+
         private void ParseCommandLine(string[] args)
         {
             // TODO
@@ -368,20 +390,17 @@ namespace PlainRSS
             TreeNode sel = treeView1.SelectedNode;
             if((sel != null) && (sel.Tag != null) && (sel.Tag is Feed))
             {
-                AddFeed af = new AddFeed(sel.Tag as Feed);
-                if (af.ShowDialog() == DialogResult.OK)
-                {
-                    Feed f = af.Feed;
-                    feeds.Add(f);
-                    if ((feedBrowser != null) && (feedBrowser.Visible))
-                        feedBrowser.AddFeed(f);
-                }
+                ModifyFeed(sel.Tag as Feed);
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            TreeNode sel = treeView1.SelectedNode;
+            if ((sel != null) && (sel.Tag != null) && (sel.Tag is Feed))
+            {
+                RemoveFeed(sel.Tag as Feed);
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
