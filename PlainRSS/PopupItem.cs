@@ -13,6 +13,7 @@ namespace PlainRSS
 {
     public partial class PopupItem : Form, IStackParent
     {
+        PopupBrowser browser;
         IStackParent stackParent;
         FeedItem itemData;
 
@@ -50,8 +51,10 @@ namespace PlainRSS
                 OnReposition.Invoke(this, RepositionEventArgs.Chained);
         }
 
-        public PopupItem(IStackParent parent, FeedItem item)
+        public PopupItem(PopupBrowser brows, IStackParent parent, FeedItem item)
         {
+            browser = brows;
+
             //DwmStuff.MARGINS margins = new DwmStuff.MARGINS();
             //margins.Left = 20;
             //margins.Top = 20;
@@ -213,6 +216,16 @@ namespace PlainRSS
         private void PopupItem_Paint(object sender, PaintEventArgs e)
         {
             //SetBitmap(Properties.Resources.skin1);
+        }
+
+        private void PopupItem_MouseHover(object sender, EventArgs e)
+        {
+            browser.ShowPreview(this);
+        }
+
+        private void PopupItem_MouseLeave(object sender, EventArgs e)
+        {
+            browser.HidePreview();
         }
     }
 }

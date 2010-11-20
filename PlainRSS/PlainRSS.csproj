@@ -132,6 +132,12 @@
     <Compile Include="PopupItem.Designer.cs">
       <DependentUpon>PopupItem.cs</DependentUpon>
     </Compile>
+    <Compile Include="PopupPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PopupPreview.Designer.cs">
+      <DependentUpon>PopupPreview.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AddFeed.resx">
@@ -145,6 +151,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PopupItem.resx">
       <DependentUpon>PopupItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PopupPreview.resx">
+      <DependentUpon>PopupPreview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

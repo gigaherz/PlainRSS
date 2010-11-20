@@ -20,6 +20,8 @@ namespace PlainRSS
 
     public class Feed
     {
+        static uint sessionUid = 0;
+
         FeedType feedType = FeedType.Unknown;
 
         AtomFeed atomFeed = null;
@@ -33,6 +35,28 @@ namespace PlainRSS
 
         string feedTitle;
         bool customTitle = false;
+
+        uint instanceUid = sessionUid++;
+
+        TimeSpan updateInterval = new TimeSpan(0,30,0);
+        DateTime lastUpdated;
+
+        public DateTime LastUpdated
+        {
+            get { return lastUpdated; }
+            set { lastUpdated = value; }
+        }
+
+        public TimeSpan UpdateInterval
+        {
+            get { return updateInterval; }
+            set { updateInterval = value; }
+        }
+
+        public uint InstanceUid
+        {
+            get { return instanceUid; }
+        }
 
         public string FeedTitle
         {

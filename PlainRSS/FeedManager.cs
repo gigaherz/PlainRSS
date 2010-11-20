@@ -13,7 +13,8 @@ namespace PlainRSS
 {
     public partial class FeedManager : Form
     {
-        List<Feed> feeds;
+        List<Feed> feeds = new List<Feed>();
+        List<Feed> feedsToUpdate = new List<Feed>();
 
         PopupBrowser feedBrowser = null;
 
@@ -55,11 +56,11 @@ namespace PlainRSS
 
                     FeedLoader.AddNewFeed(feed);
 
-                    var node = treeView1.Nodes[0];
-                    TreeNode newNode = node.Nodes.Add("#" + lastKey.ToString(), feed.FeedTitle, 1, 1);
-                    lastKey++;
-                    newNode.Tag = feed;
-                    node.Expand();
+                    ListViewItem item = listView1.Items.Add("#" + feed.InstanceUid, feed.FeedTitle, 1);
+                    item.SubItems.Add("default");
+                    item.Group = listView1.Groups["Feeds"];
+                    item.Tag = feed;
+
                     RefreshFeeds();
                 }
                 catch (Exception)
@@ -74,14 +75,23 @@ namespace PlainRSS
             AddFeed af = new AddFeed(feed);
             if (af.ShowDialog() == DialogResult.OK)
             {
+                ListViewItem oldItem = listView1.Items["#" + feed.InstanceUid];
+                oldItem.Remove();
+
                 FeedLoader.RemoveFeed(feed);
                 feeds.Remove(feed);
 
                 Feed f = af.Feed;
                 feeds.Add(f);
-                FeedLoader.AddFeed(feed);
+                FeedLoader.AddNewFeed(feed);
                 if ((feedBrowser != null) && (feedBrowser.Visible))
                     feedBrowser.AddFeed(f);
+
+                ListViewItem item = listView1.Items.Add("#" + feed.InstanceUid, feed.FeedTitle, 1);
+                item.SubItems.Add("default");
+                item.Group = listView1.Groups["Feeds"];
+                item.Tag = feed;
+
             }
         }
 
@@ -89,6 +99,7 @@ namespace PlainRSS
         {
             FeedLoader.RemoveFeed(feed);
             feeds.Remove(feed);
+            listView1.Items["#" + feed.InstanceUid].Remove();
         }
 
         private void ParseCommandLine(string[] args)
@@ -358,14 +369,14 @@ namespace PlainRSS
                 Hide();
 
             feeds = FeedLoader.LoadFeeds();
-            var node = treeView1.Nodes[0];
             foreach (Feed feed in feeds)
             {
-                TreeNode newNode = node.Nodes.Add("#" + lastKey.ToString(), feed.FeedTitle, 1, 1);
+                ListViewItem item = listView1.Items.Add("#" + lastKey.ToString(), feed.FeedTitle, 1);
+                item.SubItems.Add("default");
+                item.Group = listView1.Groups["Feeds"];
+                item.Tag = feed;
                 lastKey++;
-                newNode.Tag = feed;
             }
-            node.Expand();
 
             RefreshFeeds();
         }
@@ -387,8 +398,11 @@ namespace PlainRSS
 
         private void button2_Click(object sender, EventArgs e)
         {
-            TreeNode sel = treeView1.SelectedNode;
-            if((sel != null) && (sel.Tag != null) && (sel.Tag is Feed))
+            if (listView1.SelectedItems.Count != 1)
+                return;
+
+            ListViewItem sel = listView1.SelectedItems[0];
+            if ((sel.Tag != null) && (sel.Tag is Feed))
             {
                 ModifyFeed(sel.Tag as Feed);
             }
@@ -396,10 +410,12 @@ namespace PlainRSS
 
         private void button3_Click(object sender, EventArgs e)
         {
-            TreeNode sel = treeView1.SelectedNode;
-            if ((sel != null) && (sel.Tag != null) && (sel.Tag is Feed))
+            foreach (ListViewItem sel in listView1.SelectedItems)
             {
-                RemoveFeed(sel.Tag as Feed);
+                if ((sel.Tag != null) && (sel.Tag is Feed))
+                {
+                    RemoveFeed(sel.Tag as Feed);
+                }
             }
         }
 
@@ -413,12 +429,18 @@ namespace PlainRSS
             RefreshFeeds();
         }
 
-        private void RefreshFeeds()
+        private void RefreshFeeds(List<Feed> updates)
         {
+            feedsToUpdate.AddRange(updates);
             notifyIcon1.Icon = Properties.Resources.feed_magnify;
             backgroundWorker1.RunWorkerAsync();
             lastCheck = DateTime.Now;
             timer1.Enabled = true;
+        }
+
+        private void RefreshFeeds()
+        {
+            RefreshFeeds(feeds); // update all
         }
 
         private void FeedManager_FormClosing(object sender, FormClosingEventArgs e)
@@ -446,15 +468,25 @@ namespace PlainRSS
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if ((DateTime.Now - lastCheck).TotalMinutes >= 30)
+            if (backgroundWorker1.IsBusy)
+                return;
+
+            List<Feed> feedsTemp = new List<Feed>();
+
+            foreach (Feed f in feeds)
             {
-                RefreshFeeds();
+                if ((DateTime.Now - f.LastUpdated) >= f.UpdateInterval)
+                {
+                    feedsTemp.Add(f);
+                }
             }
+
+            RefreshFeeds(feedsTemp);
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            foreach (Feed f in feeds)
+            foreach (Feed f in feedsToUpdate)
             {
                 f.Refresh();
                 if (backgroundWorker1.CancellationPending)
@@ -465,12 +497,14 @@ namespace PlainRSS
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             int newItems = 0;
-            foreach (Feed f in feeds)
+            foreach (Feed f in feedsToUpdate)
             {
+                f.LastUpdated = DateTime.Now;
                 FeedLoader.SaveFeedItems(f);
 
                 newItems += f.CountVisibleNonDisplayedItems();
             }
+            feedsToUpdate.Clear();
             if ((newItems > 0))
             {
                 notifyIcon1.Icon = Properties.Resources.feed_go;
