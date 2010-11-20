@@ -24,6 +24,8 @@ namespace PlainRSS
 
         bool refreshing = false;
 
+        PopupPreview previewWindow = null;
+
         public event EventHandler<EventArgs> OnClose;
         public event EventHandler<RepositionEventArgs> OnReposition;
         
@@ -128,7 +130,7 @@ namespace PlainRSS
             }
             else
             {
-                PopupItem newItem = new PopupItem(parent as IStackParent, feedItem);
+                PopupItem newItem = new PopupItem(this, parent as IStackParent, feedItem);
                 newItem.OnClose += new EventHandler<EventArgs>(Stack_OnClose);
                 newItem.Show(this);
                 popupItems[feedItem] = newItem;
@@ -241,6 +243,22 @@ namespace PlainRSS
             {
                 bool res = Win32.SetForegroundWindow(ptr);
             }
+        }
+
+        internal void ShowPreview(PopupItem popupItem)
+        {
+            if (previewWindow == null)
+            {
+                previewWindow = new PopupPreview(this);
+            }
+
+            previewWindow.ShowPreview(popupItem.ItemData);
+        }
+
+        internal void HidePreview()
+        {
+            if (previewWindow != null)
+                previewWindow.Hide();
         }
     }
 }

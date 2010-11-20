@@ -29,9 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Feeds", 0, 0);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FeedManager));
-            this.treeView1 = new System.Windows.Forms.TreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -47,25 +45,11 @@
             this.button5 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.FeedName = new System.Windows.Forms.ColumnHeader(0);
+            this.UpdateInterval = new System.Windows.Forms.ColumnHeader(2);
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // treeView1
-            // 
-            this.treeView1.ImageIndex = 0;
-            this.treeView1.ImageList = this.imageList1;
-            this.treeView1.Location = new System.Drawing.Point(12, 12);
-            this.treeView1.Name = "treeView1";
-            treeNode2.ImageIndex = 0;
-            treeNode2.Name = "Node0";
-            treeNode2.SelectedImageIndex = 0;
-            treeNode2.Text = "Feeds";
-            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
-            this.treeView1.SelectedImageIndex = 0;
-            this.treeView1.ShowRootLines = false;
-            this.treeView1.Size = new System.Drawing.Size(285, 190);
-            this.treeView1.TabIndex = 1;
             // 
             // imageList1
             // 
@@ -73,6 +57,7 @@
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "folder_feed.png");
             this.imageList1.Images.SetKeyName(1, "feed-icon-14x14-expanded.png");
+            this.imageList1.Images.SetKeyName(2, "ExpirationHS.png");
             // 
             // notifyIcon1
             // 
@@ -145,7 +130,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(206, 208);
+            this.button3.Location = new System.Drawing.Point(537, 208);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(91, 23);
             this.button3.TabIndex = 5;
@@ -156,7 +141,7 @@
             // button4
             // 
             this.button4.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button4.Location = new System.Drawing.Point(222, 255);
+            this.button4.Location = new System.Drawing.Point(553, 255);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 6;
@@ -186,13 +171,37 @@
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
+            // listView1
+            // 
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.FeedName,
+            this.UpdateInterval});
+            this.listView1.FullRowSelect = true;
+            this.listView1.Location = new System.Drawing.Point(12, 12);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(616, 190);
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.TabIndex = 8;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            // 
+            // FeedName
+            // 
+            this.FeedName.Text = "Feed Name";
+            this.FeedName.Width = 240;
+            // 
+            // UpdateInterval
+            // 
+            this.UpdateInterval.Text = "Update Interval";
+            this.UpdateInterval.Width = 119;
+            // 
             // FeedManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button4;
-            this.ClientSize = new System.Drawing.Size(309, 290);
-            this.Controls.Add(this.treeView1);
+            this.ClientSize = new System.Drawing.Size(641, 290);
+            this.Controls.Add(this.listView1);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button1);
@@ -212,7 +221,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
@@ -228,5 +236,8 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Timer timer1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ColumnHeader FeedName;
+        private System.Windows.Forms.ColumnHeader UpdateInterval;
     }
 }

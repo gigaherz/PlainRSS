@@ -45,6 +45,7 @@
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "linkLabel1";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.linkLabel1.MouseHover += new System.EventHandler(this.PopupItem_MouseHover);
             // 
             // button1
             // 
@@ -59,12 +60,18 @@
             // 
             // label1
             // 
+            this.label1.AccessibleDescription = "Provides a short summary of the RSS Feed Item";
+            this.label1.AccessibleName = "Summary";
+            this.label1.AccessibleRole = System.Windows.Forms.AccessibleRole.StaticText;
+            this.label1.AutoEllipsis = true;
             this.label1.Location = new System.Drawing.Point(2, 34);
             this.label1.MaximumSize = new System.Drawing.Size(283, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(283, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "label1";
+            this.label1.UseMnemonic = false;
+            this.label1.MouseHover += new System.EventHandler(this.PopupItem_MouseHover);
             // 
             // timer1
             // 
@@ -87,7 +94,9 @@
             this.Name = "PopupItem";
             this.ShowInTaskbar = false;
             this.Load += new System.EventHandler(this.PopupItem_Load);
+            this.MouseLeave += new System.EventHandler(this.PopupItem_MouseLeave);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PopupItem_FormClosing);
+            this.MouseHover += new System.EventHandler(this.PopupItem_MouseHover);
             this.ResumeLayout(false);
 
         }
